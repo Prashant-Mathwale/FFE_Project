@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Market Pulse (Full Project)</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.js"></script>
+
+  <script id="stock-data" type="application/json">
+    [
+      {
+        "symbol": "AAPL",
+        "name": "Apple Inc.",
+        "prices": [
+          190.5, 191.2, 192.5, 191.8, 193.3, 194.0, 192.1, 195.5, 196.2, 197.0,
+          196.5, 198.0, 199.2, 200.1, 198.7, 197.5, 199.8, 201.3, 202.0, 200.5,
+          203.1, 202.4, 204.0, 205.1, 203.7, 206.0, 207.2, 205.5, 208.0, 209.3,
+          208.1, 207.5, 209.0, 210.2, 208.8, 211.5, 212.3, 210.9, 213.0, 214.5,
+          213.2, 215.0, 216.1, 214.8, 217.0, 218.3, 216.9, 219.0, 220.1, 218.7,
+          221.0, 222.3, 220.9, 223.0, 224.1, 222.7, 225.0, 226.2, 224.8, 227.0
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "name": "Microsoft Corp.",
+        "prices": [
+          330.1, 332.5, 331.0, 333.3, 335.0, 334.5, 336.2, 338.0, 337.5, 340.1,
+          341.0, 340.5, 342.7, 345.0, 343.2, 346.0, 347.1, 345.5, 348.0, 350.0,
+          349.5, 351.2, 353.0, 352.1, 355.0, 357.2, 356.0, 358.5, 360.0, 359.1,
+          361.0, 360.2, 363.0, 362.1, 365.0, 367.2, 366.0, 368.5, 370.0, 369.1,
+          372.0, 371.2, 374.0, 373.1, 376.0, 378.2, 377.0, 379.5, 381.0, 380.1,
+          383.0, 382.2, 385.0, 384.1, 387.0, 389.2, 388.0, 390.5, 392.0, 391.1
+        ]
+      },
+      {
+        "symbol": "GOOGL",
+        "name": "Alphabet Inc.",
+        "prices": [
+          135.2, 136.0, 135.5, 137.1, 138.0, 137.2, 139.0, 140.1, 139.5, 141.0,
+          140.5, 142.0, 143.2, 142.5, 144.0, 143.1, 145.0, 146.2, 145.5, 147.0,
+          146.3, 148.0, 149.1, 147.5, 150.0, 149.2, 151.0, 150.5, 152.0, 151.4,
+          153.0, 152.2, 154.0, 153.1, 155.0, 154.2, 156.0, 155.5, 157.0, 156.4,
+          158.0, 157.2, 159.0, 158.1, 160.0, 159.2, 161.0, 160.5, 162.0, 161.4,
+          163.0, 162.2, 164.0, 163.1, 165.0, 164.2, 166.0, 165.5, 167.0, 166.4
+        ]
+      },
+      {
+        "symbol": "AMZN",
+        "name": "Amazon.com, Inc.",
+        "prices": [
+          140.0, 141.2, 139.8, 142.0, 143.1, 142.5, 145.0, 144.2, 146.0, 147.3,
+          146.8, 148.5, 149.0, 150.2, 148.7, 151.0, 152.1, 150.5, 153.0, 154.2,
+          153.5, 155.0, 156.3, 154.8, 157.0, 158.2, 156.9, 159.0, 160.1, 158.8,
+          161.0, 160.2, 162.0, 161.1, 163.0, 162.2, 164.0, 163.5, 165.0, 164.4,
+          166.0, 165.2, 167.0, 166.1, 168.0, 167.2, 169.0, 168.5, 170.0, 169.4,
+          171.0, 170.2, 172.0, 171.1, 173.0, 172.2, 174.0, 173.5, 175.0, 174.4
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "name": "NVIDIA Corp.",
+        "prices": [
+          450.1, 455.2, 452.0, 460.1, 465.3, 462.1, 470.0, 475.2, 472.0, 480.5,
+          478.1, 485.0, 490.2, 488.1, 495.0, 492.1, 500.0, 505.2, 501.0, 510.3,
+          508.1, 515.0, 520.1, 518.2, 525.0, 530.1, 528.0, 535.0, 540.2, 538.1,
+          542.0, 540.5, 545.0, 543.2, 548.0, 550.1, 547.0, 552.0, 555.2, 553.1,
+          558.0, 556.5, 560.0, 558.2, 563.0, 565.1, 562.0, 567.0, 570.2, 568.1,
+          573.0, 571.5, 575.0, 573.2, 578.0, 580.1, 577.0, 582.0, 585.2, 583.1
+        ]
+      },
+      {
+        "symbol": "META",
+        "name": "Meta Platforms, Inc.",
+        "prices": [
+          290.5, 292.1, 291.0, 294.2, 296.0, 295.1, 298.0, 300.2, 299.0, 302.1,
+          301.0, 303.5, 305.0, 303.2, 306.0, 304.1, 307.0, 308.2, 306.5, 309.0,
+          308.1, 310.0, 312.1, 310.5, 313.0, 311.2, 314.0, 313.5, 315.0, 314.4,
+          316.0, 315.2, 317.0, 316.1, 318.0, 317.2, 319.0, 318.5, 320.0, 319.4,
+          321.0, 320.2, 322.0, 321.1, 323.0, 322.2, 324.0, 323.5, 325.0, 324.4,
+          326.0, 325.2, 327.0, 326.1, 328.0, 327.2, 329.0, 328.5, 330.0, 329.4
+        ]
+      }
+    ]
+  </script>
+
+  <style>
+    /* --- Global Styles --- */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000;
+      color: #b9fff8;
+      box-sizing: border-box;
+    }
+
+    #root {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* --- Page Switching Logic --- */
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+      flex: 1 0 auto;
+    }
+
+
+    /* --- Navbar Styles --- */
+    .navbar {
+      background-color: #08223c;
+      color: white;
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      color: #48bb78;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      cursor: pointer;
+      color: white;
+      user-select: none;
+      text-decoration: none;
+      padding-bottom: 4px; /* Space for underline */
+      border-bottom: 2px solid transparent; /* Placeholder for underline */
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #48bb78;
+      border-bottom-color: #48bb78; /* Show underline on hover */
+    }
+    
+    .nav-links a.active {
+      color: #48bb78;
+      border-bottom-color: #48bb78; /* Make active link match hover */
+    }
+
+    .auth-button {
+      background-color: transparent;
+      color: white;
+      border: 2px solid #48bb78;
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .auth-button:hover {
+      background-color: #48bb78;
+      color: #08223c;
+    }
+
+    /* --- Footer Styles --- */
+    .p1 {
+      background-color: #0a2540;
+      font-family: 'Segoe UI', sans-serif;
+      box-sizing: border-box;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    footer {
+      background-color: #0a2540;
+      color: #ffffff;
+      padding: 40px 60px;
+      box-shadow: inset 0 1px 0 #33475b;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .footer-section {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+      color: #3ddc97;
+    }
+
+    .footer-section p,
+    .footer-section a {
+      font-size: 0.95rem;
+      color: #e0e6ed;
+      text-decoration: none;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .footer-section a:hover {
+      color: #ffffff;
+    }
+
+    .footer-bottom {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #b0b8c1;
+      border-top: 1px solid #33475b;
+      padding-top: 10px;
+    }
+
+    .socials a {
+      display: inline-block;
+      margin-right: 12px;
+      font-size: 1.2rem;
+      color: #3ddc97;
+    }
+    
+    /* --- Home Page Styles --- */
+    .home-page-wrapper {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 20px 40px;
+    }
+
+    .green {
+      color: #2ea043;
+    }
+    .red {
+      color: #f85149;
+    }
+
+    .hero-section {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #30363d;
+      padding-bottom: 20px;
+    }
+    
+    .indices-box h2 {
+      color: #2ea043;
+      margin-bottom: 8px;
+    }
+
+    .indices-box ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .indices-box li {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      min-width: 300px;
+    }
+    
+    .status-box {
+      background-color: #161b22;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+    }
+
+    .trending-section {
+      margin-top: 30px;
+    }
+
+    .trending-section h2 {
+      color: #2ea043;
+    }
+
+    .trending-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .stock-card {
+      background: #161b22;
+      border-radius: 12px;
+      padding: 12px;
+      width: 220px;
+      border: 1px solid #30363d;
+      cursor: pointer;
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+    }
+
+    /* ADDED HOVER EFFECT */
+    .stock-card:hover {
+      transform: translateY(-5px);
+      border-color: #48bb78;
+      box-shadow: 0 8px 16px rgba(72, 187, 120, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .price-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .metrics {
+      font-size: 12px;
+      color: #8b949e;
+      margin-top: 6px;
+    }
+
+    .analytics-hero {
+      position: relative;
+      max-width: 100%;
+      height: 250px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .analytics-banner-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .analytics-banner-text {
+      position: absolute;
+      top: 50%;
+      left: 30px;
+      transform: translateY(-50%);
+      color: white;
+      text-shadow: 0 0 10px rgba(0,0,0,0.7);
+    }
+    
+    /* --- Analysis & Risk Page Wrapper --- */
+    .data-page-wrapper {
+      background-color: #1e1e2f;
+      background-image: linear-gradient(0deg, #2e2e40 1px, transparent 1px),
+        linear-gradient(90deg, #2e2e40 1px, transparent 1px);
+      background-size: 40px 40px;
+      font-family: 'Roboto', sans-serif;
+      color: #eee;
+      padding: 2rem;
+    }
+    
+    .data-page-wrapper .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 25px;
+      background: rgba(20, 20, 40, 0.85);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px 0 rgba(0, 200, 255, 0.2);
+      border: 1px solid rgba(0, 200, 255, 0.2);
+    }
+    
+    .data-page-wrapper h2 {
+      text-align: center;
+      color: #00c8ff;
+    }
+
+    /* --- Analysis Table Styles --- */
+    .analysis-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .analysis-table th,
+    .analysis-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+    }
+    
+    .analysis-table th {
+      background-color: rgba(0, 200, 255, 0.1);
+      color: #00c8ff;
+      font-size: 1.1rem;
+    }
+    
+    .analysis-table td {
+      color: #eee;
+      transition: background-color 0.2s;
+    }
+    
+    .analysis-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ADDED HOVER EFFECT */
+    .analysis-table tbody tr:hover {
+      background-color: rgba(0, 200, 255, 0.1);
+    }
+    
+    .analysis-table td:nth-child(2) {
+      color: #ffca71; /* Risk */
+    }
+    .analysis-table td:nth-child(3) {
+      color: #3ddc97; /* Reward */
+    }
+
+    
+    /* --- Risk Plot Page Styles --- */
+    .risk-page-wrapper .chart-container {
+      margin-top: 30px;
+      height: 500px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+    
+    /* ADDED: Stock Selector Styles */
+    #stock-selector-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .stock-selector-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #eee;
+      cursor: pointer;
+    }
+    .stock-selector-item input {
+      cursor: pointer;
+      width: 16px;
+      height: 16px;
+    }
+    .stock-selector-item label {
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    
+  </style>
+
+</head>
+
+<body>
+
+  <div id="root">
+
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo">Market Pulse</div>
+        <div class="nav-links">
+          <a href="#" id="nav-home" class="active">Home</a>
+          <a href="#" id="nav-analysis">Analytics</a>
+          <a href="#" id="nav-risk">Risk Plot</a>
+        </div>
+        <button class="auth-button">Login</button>
+      </div>
+    </nav>
+
+    <div id="page-home" class="page active">
+      <div class="analytics-hero">
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ0hBMgYK4Xo-om3KR3Kx65xHqiQ_K7wKYCg&s"
+          alt="Stock Analytics Dashboard" class="analytics-banner-img">
+        <div class="analytics-banner-text">
+          <h1>Market Pulse</h1>
+          <p>Real-Time Stock Updates & Financial Insights</p>
+        </div>
+      </div>
+
+      <div class="home-page-wrapper">
+        <section class="hero-section">
+          <div class="indices-box">
+            <h2>Market Indices (Sample Data)</h2>
+            <ul>
+              <li><span>NIFTY 50</span> <strong>23,450.80</strong> <span class="green">+0.25%</span></li>
+              <li><span>SENSEX</span> <strong>77,050.12</strong> <span class="green">+0.22%</span></li>
+              <li><span>DOW JONES</span> <strong>38,778.10</strong> <span class="red">-0.15%</span></li>
+              <li><span>NASDAQ</span> <strong>17,862.23</strong> <span class="green">+0.03%</span></li>
+            </ul>
+          </div>
+          <div class="status-box">
+            <h4>Market Status</h4>
+            <p class="green">Open — 9:15 AM - 3:30 PM IST</p>
+          </div>
+        </section>
+
+        <section class="trending-section">
+          <h2>Stock Dashboard (60-Day Data)</h2>
+          <div class="trending-grid" id="trending-grid-container">
+            </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="page-analysis" class="page">
+      <div class="data-page-wrapper">
+        <div class="container">
+          <h2>Analytics: Risk vs. Reward Data</h2>
+          <p style="text-align: center; color: #b0b8c1;">
+            Calculated historical risk and reward from the 60-day sample data.
+            Risk is the volatility (standard deviation of daily returns).
+            Reward is the average daily return.
+          </p>
+          
+          <table class="analysis-table">
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Risk (Volatility)</th>
+                <th>Reward (Avg. Daily Return)</th>
+              </tr>
+            </thead>
+            <tbody id="analysis-table-body">
+              </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="page-risk" class="page">
+      <div class="data-page-wrapper risk-page-wrapper">
+        <div class="container">
+          <h2>Tech Stock Risk vs. Reward (60-Day Sample)</h2>
+          <p style="text-align: center; color: #b0b8c1;">
+            Select the stocks you wish to compare on the plot.
+          </p>
+          
+          <div id="stock-selector-container">
+            </div>
+          
+          <div class="chart-container">
+            <canvas id="risk-chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="p1">
+      <footer>
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>StockTracker</h3>
+            <p>Real-time insights, built for investors and analysts.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <a href="#">Home</a>
+            <a href="#">Analytics</a>
+            <a href="#">Risk Plot</a>
+          </div>
+          <div class="footer-section">
+            <h3>Contact Us</h3>
+            <p><a href="#">Email: support@stocktracker.ai</a></p>
+            <p>Phone: +91 8793052278</p>
+          </div>
+          <div class="footer-section">
+            <h3>Follow Us</h3>
+            <div class="socials">
+              <a href="#">🌐</a>
+              <a href="#">🐦</a>
+              <a href="#">📸</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          &copy; 2025 StockTracker | FFE Project 🚀
+        </div>
+      </footer>
+    </div>
+  </div> <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // --- Global App State ---
+      let riskChartInstance = null;
+      let calculatedAnalytics = []; // Stores our calculated {symbol, name, risk, reward}
+      
+      // Parse the embedded JSON data
+      const allStockData = JSON.parse(document.getElementById('stock-data').innerHTML);
+
+      // --- 1. Core Analytics Calculation (Run Once) ---
+      
+      /**
+       * Calculates the mean (average) and standard deviation (volatility) of a dataset.
+       * @param {number[]} data - An array of numbers (e.g., daily returns).
+       * @returns {{mean: number, stdDev: number}}
+       */
+      function calculateStats(data) {
+        if (data.length === 0) return { mean: 0, stdDev: 0 };
+        
+        // Calculate Mean (Average Reward)
+        const sum = data.reduce((a, b) => a + b, 0);
+        const mean = sum / data.length;
+        
+        // Calculate Standard Deviation (Volatility / Risk)
+        const variance = data.map(k => Math.pow(k - mean, 2)).reduce((a, b) => a + b, 0) / data.length;
+        const stdDev = Math.sqrt(variance);
+        
+        return { mean, stdDev };
+      }
+      
+      /**
+       * Runs the main analysis on all stocks from the JSON data.
+       * Calculates daily returns, then uses calculateStats to find
+       * the final risk (stdDev) and reward (mean) for each stock.
+       */
+      function calculateAllAnalytics() {
+        calculatedAnalytics = []; // Clear previous calculations
+
+        for (const stock of allStockData) {
+          const prices = stock.prices;
+          const dailyReturns = [];
+          
+          // Calculate daily returns (percent change)
+          for (let i = 1; i < prices.length; i++) {
+            const dailyReturn = (prices[i] - prices[i-1]) / prices[i-1];
+            dailyReturns.push(dailyReturn);
+          }
+          
+          // Calculate stats from the array of daily returns
+          const stats = calculateStats(dailyReturns);
+          
+          calculatedAnalytics.push({
+            symbol: stock.symbol,
+            name: stock.name,
+            risk: stats.stdDev,  // This is our Risk
+            reward: stats.mean,  // This is our Reward
+          });
+        }
+      }
+
+      // --- 2. Page Render Functions ---
+
+      /**
+       * Populates the Home page with dynamic stock cards.
+       */
+      function renderHomePage() {
+        const gridContainer = document.getElementById('trending-grid-container');
+        gridContainer.innerHTML = ''; // Clear existing content
+        
+        for (const stock of allStockData) {
+          const prices = stock.prices;
+          const lastPrice = prices[prices.length - 1];
+          const prevPrice = prices[prices.length - 2];
+          
+          const change = lastPrice - prevPrice;
+          const changePercent = (change / prevPrice) * 100;
+          
+          const isPositive = change >= 0;
+          const colorClass = isPositive ? 'green' : 'red';
+          const sign = isPositive ? '+' : '';
+
+          // Create the card HTML
+          const cardHTML = `
+            <div class="stock-card">
+              <div class="card-header">
+                <span>${stock.symbol}</span>
+              </div>
+              <div class="price-line">
+                <span>$${lastPrice.toFixed(2)}</span>
+                <span class="${colorClass}">${sign}${changePercent.toFixed(2)}%</span>
+              </div>
+              <div class="metrics">
+                <span>${stock.name}</span>
+              </div>
+            </div>
+          `;
+          gridContainer.innerHTML += cardHTML;
+        }
+      }
+
+      /**
+       * Populates the Analytics page with a table of risk/reward data.
+       */
+      function renderAnalyticsPage() {
+        const tableBody = document.getElementById('analysis-table-body');
+        tableBody.innerHTML = ''; // Clear old data
+        
+        for (const stock of calculatedAnalytics) {
+          const riskPercent = (stock.risk * 100).toFixed(4);
+          const rewardPercent = (stock.reward * 100).toFixed(4);
+          
+          const rowHTML = `
+            <tr>
+              <td><strong>${stock.symbol}</strong> (${stock.name})</td>
+              <td>${riskPercent}%</td>
+              <td>${rewardPercent}%</td>
+            </tr>
+          `;
+          tableBody.innerHTML += rowHTML;
+        }
+      }
+      
+      /**
+       * Creates the interactive checkboxes on the Risk Plot page.
+       * This only needs to run once.
+       */
+      function initializeRiskPage() {
+        const selectorContainer = document.getElementById('stock-selector-container');
+        selectorContainer.innerHTML = ''; // Clear old checkboxes
+        
+        allStockData.forEach(stock => {
+          const itemHTML = `
+            <div class="stock-selector-item">
+              <input type="checkbox" id="check-${stock.symbol}" data-symbol="${stock.symbol}" checked>
+              <label for="check-${stock.symbol}">${stock.symbol}</label>
+            </div>
+          `;
+          selectorContainer.innerHTML += itemHTML;
+        });
+        
+        // Add one event listener to the container to handle all checkbox changes
+        selectorContainer.addEventListener('change', (event) => {
+          if (event.target.type === 'checkbox') {
+            renderRiskPlot(); // Re-draw the chart when any box is checked/unchecked
+          }
+        });
+      }
+      
+      /**
+       * Draws the Risk vs. Reward scatter plot.
+       * Reads the checkboxes to see which stocks to include.
+       */
+      function renderRiskPlot() {
+        // 1. Find out which stocks are selected
+        const selectedSymbols = new Set();
+        const checkboxes = document.querySelectorAll('#stock-selector-container input[type="checkbox"]:checked');
+        checkboxes.forEach(box => {
+          selectedSymbols.add(box.dataset.symbol);
+        });
+
+        // 2. Filter the calculated data based on selection
+        const plotData = calculatedAnalytics
+          .filter(stock => selectedSymbols.has(stock.symbol))
+          .map(stock => ({
+            label: stock.symbol,
+            x: stock.risk,
+            y: stock.reward,
+          }));
+        
+        const backgroundColors = [
+          'rgba(54, 162, 235, 0.7)', // Blue (AAPL)
+          'rgba(255, 99, 132, 0.7)', // Red (MSFT)
+          'rgba(75, 192, 192, 0.7)', // Green (GOOGL)
+          'rgba(255, 206, 86, 0.7)', // Yellow (AMZN)
+          'rgba(153, 102, 255, 0.7)', // Purple (NVDA)
+          'rgba(255, 159, 64, 0.7)'  // Orange (META)
+        ];
+        
+        // 3. Map colors to the selected data
+        const pointColors = plotData.map(stock => {
+            if (stock.label === 'AAPL') return backgroundColors[0];
+            if (stock.label === 'MSFT') return backgroundColors[1];
+            if (stock.label === 'GOOGL') return backgroundColors[2];
+            if (stock.label === 'AMZN') return backgroundColors[3];
+            if (stock.label === 'NVDA') return backgroundColors[4];
+            if (stock.label === 'META') return backgroundColors[5];
+            return 'rgba(200, 200, 200, 0.7)'; // Default
+        });
+
+        const ctx = document.getElementById('risk-chart').getContext('2d');
+        if (riskChartInstance) {
+          riskChartInstance.destroy(); // Clear old chart
+        }
+        
+        riskChartInstance = new Chart(ctx, {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Tech Stocks (60-Day)',
+              data: plotData,
+              backgroundColor: pointColors, // Use the mapped colors
+              pointRadius: 10,
+              pointHoverRadius: 15,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const d = context.raw;
+                    const stockLabel = plotData[context.dataIndex].label;
+                    // Format for tooltip
+                    const risk = (d.x * 100).toFixed(2);
+                    const reward = (d.y * 100).toFixed(2);
+                    return `${stockLabel}: (Risk: ${risk}%, Reward: ${reward}%)`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                title: { 
+                  display: true, 
+                  text: 'Risk (Daily Volatility / Std. Dev)', 
+                  color: '#e0f7ff' 
+                },
+                ticks: { 
+                  color: '#046a8bff',
+                  callback: value => (value * 100).toFixed(1) + '%' // Format X-axis
+                },
+                grid: { color: 'rgba(0, 200, 255, 0.1)' }
+              },
+              y: {
+                title: { 
+                  display: true, 
+                  text: 'Reward (Average Daily Return)', 
+                  color: '#e0f7ff' 
+                },
+                ticks: { 
+                  color: '#046a8bff',
+                  callback: value => (value * 100).toFixed(2) + '%' // Format Y-axis
+                },
+                grid: { color: 'rgba(0, 200, 255, 0.1)' }
+              }
+            }
+          }
+        });
+      }
+
+      // --- 3. Page Navigation (Router) ---
+      const navLinks = document.querySelectorAll('.nav-links a');
+      const pages = document.querySelectorAll('.page');
+
+      function showPage(pageId) {
+        pages.forEach(page => page.classList.remove('active'));
+        navLinks.forEach(link => link.classList.remove('active'));
+
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById('nav-' + pageId.split('-')[1]).classList.add('active');
+        
+        // Call the specific render function for the page
+        if (pageId === 'page-home') {
+          renderHomePage();
+        } else if (pageId === 'page-analysis') {
+          renderAnalyticsPage();
+        } else if (pageId === 'page-risk') {
+          renderRiskPlot(); // This will draw the chart
+        }
+      }
+
+      // Add click listeners to nav links
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const pageId = 'page-' + e.target.id.split('-')[1];
+          showPage(pageId);
+        });
+      });
+
+      // --- 4. App Initialization ---
+      
+      // First, run the expensive calculation
+      calculateAllAnalytics();
+      
+      // Set up the risk page checkboxes
+      initializeRiskPage();
+
+      // Render the default home page
+      renderHomePage();
+      
+      // Set the 'home' page and nav link as active
+      showPage('page-home');
+
+    }); // End of DOMContentLoaded
+  </script>
+
+</body>
+
+</html>
